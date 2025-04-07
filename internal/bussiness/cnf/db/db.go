@@ -71,8 +71,10 @@ func InitDB() error {
 	sqlDB, err := db.DB()
 	if err != nil {
 		loggerInstance.Errorf("failed to get sql.DB: %v", err)
+		metrics.RecordDatabaseMiss()
 		return fmt.Errorf("failed to get sql.DB: %v", err)
 	}
+	metrics.RecordDatabaseHit()
 
 	// Set connection pool settings
 	sqlDB.SetConnMaxLifetime(cfg.MaxLifetime)
